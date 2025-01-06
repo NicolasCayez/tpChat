@@ -2,8 +2,6 @@
 include('./models/connect.php');
 include('./models/_classes.php');
 
-$utilisateurs = $utilisateur->select();
-
 if(empty($_SESSION['utilisateur'])) {        
     // Permet de détruire la session PHP courante ainsi que toutes les données rattachées
     session_destroy();
@@ -11,30 +9,25 @@ if(empty($_SESSION['utilisateur'])) {
 } elseif (!empty($_SESSION['utilisateur'])) {
     $user = $utilisateur->selectById($_SESSION['utilisateur']['utilisateur_id']);
     $pseudo = $user[0]['utilisateur_pseudo'];
+    $userId = $user[0]['utilisateur_id'];
 }
-include('./base_dir.php');
 ?>
 
 
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php $base_dir?>/css/style.css" />
-    <title>Index</title>
+    <title>Chat WebSocket</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <header>
-        <?php include($base_dir."/views/header.php"); ?>
-    </header>
-    <h1>index.php</h1>
-    <!-- <?php if (isset($pseudo)) {echo '<p>Connecté avec l\'identifiant<strong> '.$pseudo.'</strong></p>';} ?>
-    <p><a href="<?php $base_dir?>/controllers/deconnexion.php">Se déconnecter</a></p> -->
+    <h1>Bienvenue, <?php echo $pseudo; ?></h1>
     <div id="chat-container">
         <div id="chat-messages"></div>
         <form id="message-form">
+            <input type="hidden" id="message-user-id" value=<?php echo $pseudo; ?>>
+            <input type="hidden" id="message-pseudo" value=<?php echo $pseudo; ?>>
             <input type="text" id="message-input" placeholder="Écrivez votre message..." required>
             <button type="submit">Envoyer</button>
         </form>

@@ -1,8 +1,7 @@
 <?php
-include('../base_dir.php');
     // On inclut notre connecteur à la base de données
-    include($base_dir.'/models/connect.php');
-    include($base_dir.'/models/_classes.php');
+    include('../models/connect.php');
+    include('../models/_classes.php');
 
     // On entre dans la boucle seulement lors de l’envoi du formulaire
     if(!empty($_POST['form_inscription']) && isset($_POST['form_inscription'])
@@ -18,9 +17,9 @@ include('../base_dir.php');
             // Insertion, true si réussi, false si raté
             if($utilisateur->insert($pseudo, password_hash($password, PASSWORD_BCRYPT, array('cost' => 12)))) {
                 // Si aucune erreur ne se produit, on propose de se connecter
-                die('<p style=”color: green;”>Inscription réussie.</p><a href="'.$base_dir.'/views/connexion.php">Se connecter.</a>');
+                die('<p style=”color: green;”>Inscription réussie.</p><a href="../views/connexion.php">Se connecter.</a>');
             }
-            die('<p style=”color: red;”>Inscription échouée.</p><a href="'.$base_dir.'/views/inscription.php">Réessayer.</a>');
+            die('<p style=”color: red;”>Inscription échouée.</p><a href="../views/inscription.php">Réessayer.</a>');
         }
     }
 ?>
@@ -32,7 +31,7 @@ include('../base_dir.php');
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php $base_dir?>/css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
     <title>Inscription</title>
 </head>
 <body class="body_custom">

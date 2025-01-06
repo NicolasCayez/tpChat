@@ -1,4 +1,5 @@
 <?php
+    namespace MyApp;
     include('../models/connect.php');
     include('../models/_classes.php');
     if(!empty($_POST['form_connexion']) && isset($_POST['form_connexion'])

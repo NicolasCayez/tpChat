@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php $base_dir?>/css/style.css" />
+    <link rel="stylesheet" href="../css/style.css" />
     <title>Connexion</title>
 </head>
 <body class="body_custom">
     <?php if(!isset($_POST['form_pseudo'])) { ?>
         <div class="custom_card">
             <h1>Connexion</h1>
-            <form action="<?php $base_dir?>/views/connexion.php" method="post">
+            <form action="../views/connexion.php" method="post">
                 <label for="form_pseudo">Pseudo:</label>
                 <input type="text" name="form_pseudo" id="form_pseudo" placeholder="pseudonyme" class="margin-top-5">
                 <input type="submit" value="Etape suivante" class="margin-top-20">
@@ -31,7 +31,7 @@
                     <input type="submit" value="Se connecter" class="margin-top-20">
                 </form>
                 <?php } ?>
-                <form action="<?php $base_dir?>/views/inscription.php" method="post">
+                <form action="../views/inscription.php" method="post">
                     <label for="form_password">Pas de compte, inscrivez-vous:</label>
                     <input type="submit" value="S'inscrire">
                 </form>

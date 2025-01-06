@@ -11,8 +11,11 @@ conn.onopen = function(e) {
 
 // Actions à effectuer lorsqu'un message est reçu
 conn.onmessage = function(e) {
+    // traitement json reçu
+    msgArr = JSON.parse(e.data);
     const message = document.createElement('div');
-    message.textContent = e.data;
+    message.textContent = msgArr["author"] + " a écrit : " + msgArr["message"];
+    // message.textContent = e.data;
     message.className = 'message received';
     messagesDiv.appendChild(message);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -28,11 +31,15 @@ messageForm.onsubmit = function(e) {
     e.preventDefault();
     if (messageInput.value) {
         const message = document.createElement('div');
-        message.textContent = messageInput.value;
+        console.log(messageInput.value);
+        let authorPseudo = document.forms["message-form"].elements["message-pseudo"].value;
+        let authorId = document.forms["message-form"].elements["message-user-id"].value;
+        message.textContent = authorPseudo + " (vous) : " + messageInput.value;
         message.className = 'message sent';
         messagesDiv.appendChild(message);
-
-        conn.send(messageInput.value);
+        let msgAndauthor = '{"message":"'+messageInput.value+'","author":"'+authorPseudo+'","authorId":"'+authorId+'"}';
+        conn.send(msgAndauthor);
+        // conn.send(messageInput.value);
         messageInput.value = '';
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }

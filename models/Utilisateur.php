@@ -1,4 +1,5 @@
 <?php
+// Utilisation de l'espace de nom MyApp lié au composer.json
 namespace MyApp;
 
 use PDO;
@@ -57,9 +58,9 @@ class Utilisateur
     }
 
     
-    public function selectByPseudo($sPseudoUtilisateur)
+    public function selectByPseudo($utilisateur_pseudo)
     {
-        $this->selectByPseudo->execute(array(':utilisateur_pseudo' => $sPseudoUtilisateur));
+        $this->selectByPseudo->execute(array(':utilisateur_pseudo' => $utilisateur_pseudo));
         if ($this->selectByPseudo->errorCode() != 0) {
             print_r($this->selectByPseudo->errorInfo());
         }
