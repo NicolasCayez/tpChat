@@ -6,16 +6,17 @@ use PDO;
 use PDOException;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
-use MyApp\ChatMessage;
 
 class Chat implements MessageComponentInterface {
     protected $clients;
+    protected $chatMessage;
 
 
     // Constructeur pour initialiser la liste des clients
-    public function __construct() {
+    public function __construct($db) {
         $this->clients = new \SplObjectStorage;
-        // include './models/config.php';
+        require __DIR__ ."/models/ChatMessage.php";
+        $this->chatMessage = new ChatMessage($db);
 
     }
 
@@ -33,7 +34,7 @@ class Chat implements MessageComponentInterface {
         $msgTxt = strval($msgArr["message"]);
         echo sprintf('Connexion %d "%s" envoi le message "%s" à %d client(s)' . "\n"
             , $from->resourceId, $author, $msgTxt, $numRecv);
-        // $this->saveMsg($msg);
+        $this->saveMsg($msg);
         foreach ($this->clients as $client) {
             if ($from !== $client) {
                 $client->send($msg);
@@ -53,23 +54,12 @@ class Chat implements MessageComponentInterface {
         $conn->close();
     }
 
-    // //méthode d'enregistrement des messages en BDD
-    // protected function saveMsg ($msg) {
-    //     // Cette fonction sert à démarrer une session PHP (que vous pouvez notamment retrouver dans vos cookies)
-    //     // Nous nous en servirons un petit peu plus tard
-    //     include ('./models/config.php');
-    //     try {
-    //         $db = new PDO('mysql:host='.$DB_HOST.';dbname='. $DB_NAME, $BD_USER, $DB_PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-    //     } catch(PDOException $e) {
-    //         $db = NULL;
-    //         echo ('Erreur: ' . $e->getMessage());
-    //     }
-    //     $chatMessage = new ChatMessage($db);
-    //     // include ('./models/_classes.php');
-    //     $msgArr = json_decode($msg, true);
-    //     $msgTxt = strval($msgArr["message"]);
-    //     $msgAuthorId = strval($msgArr["authorId"]);
-    //     $r = $chatMessage->insert($msgTxt, date("Y-m-d H:i:s"), $msgAuthorId);
-    // }
+    //méthode d'enregistrement des messages en BDD
+    protected function saveMsg ($msg) {
+        $msgArr = json_decode($msg, true);
+        $msgTxt = strval($msgArr["message"]);
+        $msgAuthorId = strval($msgArr["authorId"]);
+        $r = $this->chatMessage->insert($msgTxt, date("Y-m-d H:i:s"), $msgAuthorId);
+    }
 }
 ?>

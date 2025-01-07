@@ -26,7 +26,7 @@ if(empty($_SESSION['utilisateur'])) {
     <div id="chat-container">
         <div id="chat-messages"></div>
         <form id="message-form">
-            <input type="hidden" id="message-user-id" value=<?php echo $pseudo; ?>>
+            <input type="hidden" id="message-user-id" value=<?php echo $userId; ?>>
             <input type="hidden" id="message-pseudo" value=<?php echo $pseudo; ?>>
             <input type="text" id="message-input" placeholder="Écrivez votre message..." required>
             <button type="submit">Envoyer</button>
