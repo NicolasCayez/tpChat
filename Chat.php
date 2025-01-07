@@ -10,6 +10,8 @@ use Ratchet\ConnectionInterface;
 class Chat implements MessageComponentInterface {
     protected $clients;
     protected $chatMessage;
+    protected $author;
+    protected $oldMsgArr;
 
 
     // Constructeur pour initialiser la liste des clients
@@ -17,6 +19,8 @@ class Chat implements MessageComponentInterface {
         $this->clients = new \SplObjectStorage;
         require __DIR__ ."/models/ChatMessage.php";
         $this->chatMessage = new ChatMessage($db);
+        require __DIR__ ."/models/Utilisateur.php";
+        $this->author = new Utilisateur($db);
 
     }
 
@@ -24,6 +28,15 @@ class Chat implements MessageComponentInterface {
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
         echo "Nouvelle connexion! ({$conn->resourceId})\n";
+        //* TEST chargement messages
+        $oldMsgArr = $this->getOldMsg();
+        foreach ($oldMsgArr as $oneOldMsg) {
+            $msgAuthor = $this->author->selectById($oneOldMsg["id_utilisateur"]);
+            var_dump($msgAuthor[0]["utilisateur_pseudo"]);
+            $oneOldMsgToShow = '{"message":"'.$oneOldMsg["message_txt"].'","author":"'.$msgAuthor[0]["utilisateur_pseudo"].'","authorId":"'.$oneOldMsg["id_utilisateur"].'"}';
+            $conn->send($oneOldMsgToShow);
+        }
+
     }
 
     // Méthode appelée lorsqu'un client envoie un message
@@ -60,6 +73,12 @@ class Chat implements MessageComponentInterface {
         $msgTxt = strval($msgArr["message"]);
         $msgAuthorId = strval($msgArr["authorId"]);
         $r = $this->chatMessage->insert($msgTxt, date("Y-m-d H:i:s"), $msgAuthorId);
+    }
+
+    //méthode de chargement des anciens messages
+    protected function getOldMsg () {
+        $oldMsgArr = $this->chatMessage->select();
+        return($oldMsgArr);
     }
 }
 ?>
